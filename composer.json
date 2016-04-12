@@ -1,0 +1,51 @@
+{
+    "name": "m3uzz/onionfw",
+    "description": "Onion CMS",
+    "homepage": "http://onion.m3uzz.com/",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Humberto S Lourenco",
+            "email": "betto@m3uzz.com"
+        }
+    ],
+    "keywords": [
+    	"m3uzz",
+        "onion",
+        "onionfw",
+        "cms",
+        "framework"
+    ],
+    "type": "library",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "m3uzz/onionfw",
+                "version": "master",
+                "dist": {
+                    "url": "https://github.com/m3uzz/onionfw/archive/master.zip",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "https://github.com/m3uzz/onionfw.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "m3uzz/onionlib": "master"
+    },
+    "require-dev": {
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "Onion\\": "src/"
+        }
+    }
+}
