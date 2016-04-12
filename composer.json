@@ -37,7 +37,8 @@
     ],
     "require": {
         "php": ">=5.4",
-        "m3uzz/onionlib": "master"
+        "m3uzz/onionlib": "master",
+        "zendframework/zendframework": "dev-master"
     },
     "require-dev": {
     },
