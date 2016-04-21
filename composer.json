@@ -41,6 +41,7 @@
         "zendframework/zendframework": "dev-master"
     },
     "require-dev": {
+        "m3uzz/onionlib": "master",
     },
     "suggest": {
     },
