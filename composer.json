@@ -39,7 +39,8 @@
         "php": ">=5.4",
         "m3uzz/onionlib": "master",
         "m3uzz/onionsrv": "master",
-        "zendframework/zendframework": "dev-master"
+        "m3uzz/module": "master",
+        "zendframework/zendframework": "2.3.*"
     },
     "require-dev": {
         "m3uzz/oniontool": "master"
