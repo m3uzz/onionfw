@@ -120,6 +120,31 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 		
 	
 	/**
+	 *
+	 * @param string $psProperty
+	 * @return mixed | null
+	 */
+	public function getFormProperty ($psProperty)
+	{
+		if (property_exists($this, $psProperty))
+		{
+			return $this->$psProperty;
+		}
+		else
+		{
+			$lsProperty = "_{$psProperty}";
+			
+			if (property_exists($this, $lsProperty))
+			{
+				return $this->$lsProperty;
+			}
+		}
+		
+		return null;
+	}
+	
+	
+	/**
 	 * (non-PHPdoc)
 	 * @see \DoctrineModule\Persistence\ObjectManagerAwareInterface::setObjectManager()
 	 */
@@ -356,6 +381,15 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 		return $this->_bCollapsed;
 	}
 	
+	
+	/**
+	 *
+	 * @return string
+	 */
+	public function getFormHTML5Validate ()
+	{
+		return $this->_bformHTML5Validate;
+	}
 	
 	/**
 	 * 

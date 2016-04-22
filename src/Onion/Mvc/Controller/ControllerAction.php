@@ -78,6 +78,7 @@ abstract class ControllerAction extends ControllerActionBase
 		return $this->setResponseType($loView, $lsGrid);
 	}
 	
+	
 	/**
 	 * 
 	 * @return \Onion\View\Model\ViewModel
@@ -99,6 +100,7 @@ abstract class ControllerAction extends ControllerActionBase
 		return $this->setResponseType($loView, $lsGrid);
 	}
 	
+	
 	/**
 	 * 
 	 * @return \Onion\View\Model\ViewModel
@@ -118,6 +120,7 @@ abstract class ControllerAction extends ControllerActionBase
 		
 		return $this->setResponseType($loView);
 	}
+	
 	
 	/**
 	 * 
@@ -206,6 +209,7 @@ abstract class ControllerAction extends ControllerActionBase
 		
 		return $lsGrid;
 	}
+	
 	
 	/**
 	 * 
@@ -297,6 +301,7 @@ abstract class ControllerAction extends ControllerActionBase
 		$loView = new ViewModel();
 		return $this->setResponseType($loView, $lsGrid);
 	}	
+	
 	
 	/**
 	 * 
@@ -414,6 +419,7 @@ abstract class ControllerAction extends ControllerActionBase
 		
 		return $this->setResponseType($loView);
 	}
+	
 	
 	/**
 	 * 
@@ -546,6 +552,7 @@ abstract class ControllerAction extends ControllerActionBase
 		return $this->setResponseType($loView);
 	}
 	
+	
 	/**
 	 * 
 	 * @return unknown|\Onion\View\Model\ViewModel
@@ -591,6 +598,7 @@ abstract class ControllerAction extends ControllerActionBase
 
 		return $this->setResponseType($loView, $lsView);
 	}
+	
 	
 	/**
 	 * 
@@ -640,74 +648,87 @@ abstract class ControllerAction extends ControllerActionBase
 			$loView = new ViewModel();
 			return $this->setResponseType($loView);
 		}
-		else 
+		else
 		{
 			return $this->redirect()->toRoute($this->_sRoute, array(
-			'action' => $this->requestPost('back', 'index')
+				'action' => $this->requestPost('back', 'index')
 			));
 		}
 	}
+
 	
 	/**
 	 * 
 	 */
 	public function moveListAction ()
 	{
-		if ($this->requestIsQuery())
+		$laCheck = $this->request('ckd');
+
+		if (! is_array($laCheck))
 		{
-			$laCheck = $this->requestQuery('ckd');
-	
-			if (!is_array($laCheck))
+			$laCheck = explode(',', $laCheck);
+			
+			if (empty($laCheck[0]))
 			{
-				$laCheck = explode(',', $laCheck);
-	
-				if (empty($laCheck[0]))
-				{
-					$laCheck = null;
-				}
+				$laCheck = null;
 			}
-				
-			if ($laCheck === null)
-			{
-				return $this->redirect()->toRoute($this->_sRoute, array(
-					'action' => $this->requestQuery('back', 'index')
-				));
-			}
-			else
-			{
-				$lbError = false;
-	
-				foreach ($laCheck as $lnId)
-				{
-					$loEntity = $this->getEntityManager()->find($this->_sEntity, $lnId);
-	
-					if ($loEntity)
-					{
-						$loEntity->moveTo();
-						
-						$lbError = !$this->entityFlush();
-					}
-					else
-					{
-						$lbError = true;
-					}
-				}
-	
-				if (!$lbError)
-				{
-					$this->flashMessenger()->addMessage(array('id'=>$this->get('_sModule') . '-' . microtime(true), 'hidden'=>$this->get('_bHiddenPushMessage'), 'push'=>$this->get('_bPushMessage'), 'type'=>'success', 'msg'=>Translator::i18n('Movido com sucesso!')));
-				}
-				else
-				{
-					$this->flashMessenger()->addMessage(array('id'=>$this->get('_sModule') . '-' . microtime(true), 'hidden'=>$this->get('_bHiddenPushMessage'), 'push'=>$this->get('_bPushMessage'), 'type'=>'warning', 'msg'=>Translator::i18n('Ops! Algo errado aconteceu.!')));
-				}
-			}
-				
+		}
+
+		if ($laCheck === null)
+		{
 			return $this->redirect()->toRoute($this->_sRoute, array(
 				'action' => $this->requestQuery('back', 'index')
 			));
 		}
+		else
+		{
+			$lbError = false;
+			
+			foreach ($laCheck as $lnId)
+			{
+				$loEntity = $this->getEntityManager()->find($this->_sEntity, $lnId);
+				
+				if ($loEntity)
+				{
+					$loEntity->moveTo();
+					
+					$lbError = ! $this->entityFlush();
+				}
+				else
+				{
+					$lbError = true;
+				}
+			}
+			
+			if (! $lbError)
+			{
+				$this->flashMessenger()->addMessage(
+						array(
+							'id' => $this->get('_sModule') . '-' . microtime(true),
+							'hidden' => $this->get('_bHiddenPushMessage'),
+							'push' => $this->get('_bPushMessage'),
+							'type' => 'success',
+							'msg' => Translator::i18n('Movido com sucesso!')
+						));
+			}
+			else
+			{
+				$this->flashMessenger()->addMessage(
+						array(
+							'id' => $this->get('_sModule') . '-' . microtime(true),
+							'hidden' => $this->get('_bHiddenPushMessage'),
+							'push' => $this->get('_bPushMessage'), 
+							'type'=>'warning', 
+							'msg'=>Translator::i18n('Ops! Algo errado aconteceu.!')
+						));
+			}
+		}
+				
+		return $this->redirect()->toRoute($this->_sRoute, array(
+			'action' => $this->requestQuery('back', 'index')
+		));
 	}
+	
 	
 	/**
 	 * 
@@ -774,6 +795,7 @@ abstract class ControllerAction extends ControllerActionBase
 		}
 	}
 	
+	
 	/**
 	 * 
 	 */
@@ -816,6 +838,7 @@ abstract class ControllerAction extends ControllerActionBase
 		));
 	}
 
+	
 	/**
 	 * 
 	 */
@@ -823,6 +846,7 @@ abstract class ControllerAction extends ControllerActionBase
 	{
 		
 	}
+	
 	
 	/**
 	 * 
@@ -1442,6 +1466,7 @@ abstract class ControllerAction extends ControllerActionBase
 		return $lsGrid;	
 	}
 	
+	
 	/**
 	 * 
 	 * @param array $paParams
@@ -1494,6 +1519,7 @@ abstract class ControllerAction extends ControllerActionBase
 		
 		return $lsView;
 	}
+	
 	
 	/**
 	 * 
@@ -1784,6 +1810,7 @@ abstract class ControllerAction extends ControllerActionBase
 		return $lsGrid;
 	}
 	
+	
 	/**
 	 * 
 	 * @return \Onion\Mvc\Controller\unknown
@@ -1868,6 +1895,7 @@ abstract class ControllerAction extends ControllerActionBase
 		return $this->csv();
 	}
 		
+	
 	/**
 	 * @param array $paParams
 	 * @return \Zend\Http\Response

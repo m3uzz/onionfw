@@ -147,7 +147,14 @@ class DateTimePicker extends ElementAbstract
 		$laMessage = $this->getFieldMessage();
 	
 		$laDateTime = preg_split("/ |T/", $this->_sValue);
-	
+		$lsDate = (isset($laDateTime[0]) ? $laDateTime[0] : "");
+		$lsTime = (isset($laDateTime[1]) ? $laDateTime[1] : "");
+		
+		if ($this->getDataOptsVal('format-date', true))
+		{
+			$lsDate = Translator::dateS2P($lsDate);
+		}
+		
 		Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
@@ -157,8 +164,8 @@ class DateTimePicker extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%VALUE%#", Translator::dateS2P($this->_sValue));
 		Layout::parseTemplate($this->_sTemplate, "#%TYPE%#", $this->getAttrVal('type'));
 		Layout::parseTemplate($this->_sTemplate, "#%CLASS%#", $this->getAttrVal('class') . $laMessage['class']);	
-		Layout::parseTemplate($this->_sTemplate, "#%VALUE1%#", (isset($laDateTime[0]) ? Translator::dateS2P($laDateTime[0]) : ""));
-		Layout::parseTemplate($this->_sTemplate, "#%VALUE2%#", (isset($laDateTime[1]) ? $laDateTime[1] : ""));
+		Layout::parseTemplate($this->_sTemplate, "#%VALUE1%#", $lsDate);
+		Layout::parseTemplate($this->_sTemplate, "#%VALUE2%#", $lsTime);
 		Layout::parseTemplate($this->_sTemplate, "#%TITLE%#", $this->getAttrVal('title'));
 		
 		Layout::parseTemplate($this->_sTemplate, "#%PLACEHOLDER%#", $this->getAttrVal('placeholder'));

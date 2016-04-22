@@ -156,8 +156,6 @@ class OpenModalBtn extends ElementAbstract
 	{
 		$laMessage = $this->getFieldMessage();
 	
-		$this->_oElement->setAttribute('readonly', true);	
-		
 		Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
@@ -185,7 +183,7 @@ class OpenModalBtn extends ElementAbstract
 		
 		Layout::parseTemplate($this->_sTemplate, "#%PLACEHOLDER%#", $this->getAttrVal('placeholder'));
 		Layout::parseTemplate($this->_sTemplate, "#%REQUIRED%#", $this->getAttrVal('required'));
-		Layout::parseTemplate($this->_sTemplate, "#%READONLY%#", $this->getAttrVal('readonly'));
+		Layout::parseTemplate($this->_sTemplate, "#%READONLY%#", $this->getAttrVal('readonly', 'readonly="readonly"'));
 		
 		$lsBtnExtraTemplate = "";
 

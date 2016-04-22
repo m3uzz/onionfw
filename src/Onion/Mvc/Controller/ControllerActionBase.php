@@ -281,7 +281,7 @@ abstract class ControllerActionBase extends Zend\AbstractActionController
 	}
 	
 	/**
-	 *
+	 * 
 	 */
 	public function getServiceLocator ()
 	{

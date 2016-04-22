@@ -117,7 +117,12 @@ class DatePicker extends ElementAbstract
 	public function render ($poView = null)
 	{
 		$laMessage = $this->getFieldMessage();
-	
+		
+		if ($this->getDataOptsVal('format-date', true))
+		{
+			$this->_sValue = Translator::dateS2P($this->_sValue);
+		}
+		
 		Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
@@ -126,7 +131,7 @@ class DatePicker extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%ID%#", $this->getAttrVal('id'));
 		Layout::parseTemplate($this->_sTemplate, "#%NAME%#", $this->_sName);
 		Layout::parseTemplate($this->_sTemplate, "#%CLASS%#", $this->getAttrVal('class') . $laMessage['class']);
-		Layout::parseTemplate($this->_sTemplate, "#%VALUE%#", Translator::dateS2P($this->_sValue));
+		Layout::parseTemplate($this->_sTemplate, "#%VALUE%#", $this->_sValue);
 		Layout::parseTemplate($this->_sTemplate, "#%TITLE%#", $this->getAttrVal('title'));
 		
 		Layout::parseTemplate($this->_sTemplate, "#%PLACEHOLDER%#", $this->getAttrVal('placeholder'));
