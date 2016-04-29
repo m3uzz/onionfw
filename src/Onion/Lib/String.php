@@ -1432,7 +1432,7 @@ class String
 		$psStr = self::unHtmlEntities($psStr);
 		$psStr = strtr($psStr, $laReplace);
 		$psStr = substr($psStr, "0", $pnLen);
-		$psStr = self::retiraAcento($psStr);
+		$psStr = self::removeAccentuation($psStr);
 		$psStr = trim($psStr);
 		
 		$psStr = preg_replace(array(
