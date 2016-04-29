@@ -710,7 +710,7 @@ class Grid extends AbstractApp
 		$lsModal = $this->renderModal();
 		
 		$lsGrid = '
-		<link href="/vendor/onion/css/grid.css" media="all" rel="stylesheet" type="text/css">
+		<link href="/vendor/m3uzz/onionjs-0.16.4/dist/css/grid.css" media="all" rel="stylesheet" type="text/css">
 		<div id="onion-grid-' . $this->get('id') . '" class="onion-grid">
 			' . $lsGridHeader . '
 			' . $lsMessages . '	
@@ -726,7 +726,7 @@ class Grid extends AbstractApp
 			' . $lsAlert . '
 			' . $lsModal . '
 		</div>
-		<script type="text/javascript" src="/vendor/onion/js/grid.js"></script>';
+		<script type="text/javascript" src="/vendor/m3uzz/onionjs-0.16.4/dist/js/grid.js"></script>';
 	
 		return $lsGrid;
 	}	

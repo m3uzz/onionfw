@@ -806,7 +806,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 		
 		$this->prepare();
 	
-		$poView->headLink()->appendStylesheet($poView->basePath('/vendor/onion/css/form.css'));
+		$poView->headLink()->appendStylesheet($poView->basePath('/vendor/m3uzz/onionjs-0.16.4/dist/css/form.css'));
 	
 		$lsForm = $this->getFlashMessage($poView);
 	
@@ -899,7 +899,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 	
 		$lsForm .= $this->renderSeachModal();
 	
-		$poView->inlineScript()->prependFile($poView->basePath('/vendor/onion/js/form.js'));
+		$poView->inlineScript()->prependFile($poView->basePath('/vendor/m3uzz/onionjs-0.16.4/dist/js/form.js'));
 		
 		return $lsForm;
 	}
@@ -961,7 +961,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 			<div id="ChangePasswordContainer" >
 				<div class="row">';
 				
-		$poView->headLink()->appendStylesheet($poView->basePath('/vendor/onion/css/form.css'));
+		$poView->headLink()->appendStylesheet($poView->basePath('/vendor/m3uzz/onionjs-0.16.4/dist/css/form.css'));
 		
 		$lsForm .= $this->getFlashMessage($poView);
 			
@@ -975,7 +975,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 		
 		$lsForm .= $poView->form()->closeTag();
 		
-		$poView->inlineScript()->prependFile($poView->basePath('/vendor/onion/js/form.js'));
+		$poView->inlineScript()->prependFile($poView->basePath('/vendor/m3uzz/onionjs-0.16.4/dist/js/form.js'));
 
 		$lsForm .= '
 				</div>
@@ -1040,7 +1040,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 	
 		$this->prepare();
 	
-		$poView->headLink()->appendStylesheet($poView->basePath('/vendor/onion/css/form.css'));
+		$poView->headLink()->appendStylesheet($poView->basePath('/vendor/m3uzz/onionjs-0.16.4/dist/css/form.css'));
 	
 		$lsForm = $this->getFlashMessage($poView);
 	
@@ -1136,7 +1136,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 		$lsForm .= '
 			</div>';
 	
-		$poView->inlineScript()->prependFile($poView->basePath('/vendor/onion/js/form.js'));
+		$poView->inlineScript()->prependFile($poView->basePath('/vendor/m3uzz/onionjs-0.16.4/dist/js/form.js'));
 	
 		return $lsForm;
 	}
