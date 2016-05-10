@@ -62,16 +62,17 @@ class CaptchaImage extends Zend\Image
 		);
 		
 		$lnBg = mt_rand(0, count($laBg) - 1);
+		$lsLayoutDir = BASE_DIR . DS . 'layout' . DS . 'theme' . DS . 'captcha';
 		
 		$laOptions = array(
-			'font' => BASE_DIR . DS . 'layout' . DS . 'public' . DS . 'onion' . DS . 'font' . DS . $laFonts[$lnFont],
+			'font' => $lsLayoutDir . DS . 'font' . DS . $laFonts[$lnFont],
 			'width' => 200,
 			'height' => 100,
 			'dotNoiseLevel' => 80,
 			'lineNoiseLevel' => 5,
 			'imgDir' => CLIENT_DIR . DS . 'data' . DS . 'temp',
 			'imgUrl' => '/data/temp',
-			'startImage' => BASE_DIR . DS . 'layout' . DS . 'public' . DS . 'onion' . DS . 'img' . DS . $laBg[$lnBg]
+			'startImage' => $lsLayoutDir . DS . 'img' . DS . $laBg[$lnBg]
 		);
 		
 		parent::__construct($laOptions);

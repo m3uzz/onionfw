@@ -461,7 +461,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 	{
 		$laFormClientConfig = $this->getFormOptions($this->_sModule);
 		
-		if (is_array($laFormClientConfig) && (isset($laFormClientConfig[$this->_sModule]) && isset($laFormClientConfig[$this->_sForm]) && is_array($laFormClientConfig[$this->_sForm])))
+		if (is_array($laFormClientConfig) && (isset($laFormClientConfig[$this->_sForm]) && is_array($laFormClientConfig[$this->_sForm])))
 		{
 			foreach ($laFormClientConfig[$this->_sForm] as $lsField => $laPropertie)
 			{
