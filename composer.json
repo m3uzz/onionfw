@@ -40,7 +40,7 @@
         "m3uzz/onionlib": "master",
         "m3uzz/onionsrv": "master",
         "m3uzz/module": "master",
-        "zendframework/zendframework": "2.3.*"
+        "zendframework/zendframework": "2.*"
     },
     "require-dev": {
         "m3uzz/oniontool": "master"
