@@ -112,7 +112,7 @@ class PlaySms
 	{
 		$this->data = json_decode($this->response);
 		
-		if ($this->data->status == 'OK')
+		if (isset($this->data->status) && $this->data->status == 'OK')
 		{
 			$this->status = TRUE;
 		}
@@ -121,7 +121,15 @@ class PlaySms
 			$this->status = FALSE;
 		}
 		
-		$this->error = ((int) $this->data->error > 0 ? (int) $this->data->error : 0);
+		if (isset($this->data->error) && $this->data->error > 0)
+		{
+		    $this->error = (int) $this->data->error;    
+		}
+		else 
+		{
+		    $this->error = 0;
+		}
+		
 		$this->error_string = isset($this->data->error_string) ? $this->data->error_string : '';
 	}
 
