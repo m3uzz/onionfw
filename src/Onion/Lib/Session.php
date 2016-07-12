@@ -44,6 +44,10 @@
 
 namespace Onion\Lib;
 use \Zend\Session\SessionManager;
+use \Zend\Session\Container;
+use \Zend\Session\Storage\SessionArrayStorage;
+use \Zend\Stdlib\ArrayObject;
+use Onion\Log\Debug;
 
 class Session extends SessionManager
 {
@@ -56,18 +60,24 @@ class Session extends SessionManager
 	
 	public static function setRegister($psVar, $pmValue, $psNamespace='ONION')
 	{
-		$loSession = new Zend_Session_Namespace($psNamespace);
+		$loSession = new Container($psNamespace);
 		$loSession->$psVar = $pmValue;
 	}
 	
 	
 	public static function getRegister($psVar, $psNamespace='ONION')
 	{
-		$loSession = new Zend_Session_Namespace($psNamespace);
-		
-		if(property_exists($loSession, $psVar))
+		$loContainer = new Container($psNamespace);
+		$loSession = $loContainer->getManager()->getStorage();
+
+		if(($loSession instanceof SessionArrayStorage))
 		{
-			return $loSession->$psVar;
+		    $loNamespace = $loSession->offsetGet($psNamespace);
+		    
+		    if(($loNamespace instanceof ArrayObject) && $loNamespace->offsetExists($psVar))
+		    {
+			     return $loNamespace->offsetGet($psVar);
+		    }
 		}
 		
 		return null;
@@ -76,11 +86,17 @@ class Session extends SessionManager
 	
 	public static function isRegistred($psVar, $psNamespace='ONION')
 	{
-		$loSession = new Zend_Session_Namespace($psNamespace);
-	
-		if(property_exists($loSession, $psVar))
+		$loContainer = new Container($psNamespace);
+		$loSession = $loContainer->getManager()->getStorage();
+
+		if(($loSession instanceof SessionArrayStorage))
 		{
-			return true;
+		    $loNamespace = $loSession->offsetGet($psNamespace);
+		    
+		    if(($loNamespace instanceof ArrayObject) && $loNamespace->offsetExists($psVar))
+		    {
+			     return true;
+		    }
 		}
 
 		return false;
@@ -89,11 +105,17 @@ class Session extends SessionManager
 	
 	public static function clearRegister($psVar, $psNamespace='ONION')
 	{
-		$loSession = new Zend_Session_Namespace($psNamespace);
+		$loContainer = new Container($psNamespace);
+		$loSession = $loContainer->getManager()->getStorage();
 	
-		if(property_exists($loSession, $psVar))
+		if(($loSession instanceof SessionArrayStorage))
 		{
-			unset($loSession->$psVar);
+		    $loNamespace = $loSession->offsetGet($psNamespace);
+		    
+		    if(($loNamespace instanceof ArrayObject) && $loNamespace->offsetExists($psVar))
+		    {
+			     $loNamespace->offsetUnset($psVar);
+		    }
 		}
 	}	
 }

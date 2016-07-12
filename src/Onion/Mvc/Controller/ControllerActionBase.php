@@ -51,6 +51,7 @@ use Onion\I18n\Translator;
 use Onion\View\Model\ViewModel;
 use Onion\Json\Json;
 use Zend\Session\Container;
+use Onion\Lib\Session;
 
 
 abstract class ControllerActionBase extends Zend\AbstractActionController
@@ -442,11 +443,14 @@ abstract class ControllerActionBase extends Zend\AbstractActionController
 	 */
 	public function getAuthenticatedUser ($pbReturnObject = false)
 	{
-		$loAuthService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
+	    $loSession = new Session();
+		$loUser = $loSession->getRegister('OnionAuth');
+		//$loAuthService = $this->getServiceLocator()->get('Zend\Authentication\AuthenticationService');
 		
-		if ($loAuthService->hasIdentity())
+		//if ($loAuthService->hasIdentity())
+		if (is_object($loUser))
 		{
-			$loUser = $loAuthService->getIdentity();
+			//$loUser = $loAuthService->getIdentity();
 			
 			if ($pbReturnObject)
 			{

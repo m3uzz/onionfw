@@ -631,11 +631,16 @@ abstract class ControllerAction extends ControllerActionBase
 	
 		if ($loEntity)
 		{
+		    $loEntityOriginal = clone $loEntity;
 			$loEntity->moveTo();
 			
 			if ($this->entityFlush())
 			{	
-				$this->flashMessenger()->addMessage(array('id'=>$this->get('_sModule') . '-' . microtime(true), 'hidden'=>$this->get('_bHiddenPushMessage'), 'push'=>$this->get('_bPushMessage'), 'type'=>'success', 'msg'=>Translator::i18n('Movido com sucesso!')));
+			    $lnUserId = $this->getAuthenticatedUser();
+			    $laChanges = $this->checkChangeEntity($loEntityOriginal, $loEntity);
+			    Event::log(array('userId'=>$lnUserId, 'module'=>$this->_sModule, 'action'=>'move', 'record'=>$loEntity->get('id'), 'changes'=>$laChanges), 6);			    
+
+			    $this->flashMessenger()->addMessage(array('id'=>$this->get('_sModule') . '-' . microtime(true), 'hidden'=>$this->get('_bHiddenPushMessage'), 'push'=>$this->get('_bPushMessage'), 'type'=>'success', 'msg'=>Translator::i18n('Movido com sucesso!')));
 			}
 		}
 		else
@@ -690,9 +695,17 @@ abstract class ControllerAction extends ControllerActionBase
 				
 				if ($loEntity)
 				{
+				    $loEntityOriginal = clone $loEntity;
 					$loEntity->moveTo();
 					
-					$lbError = ! $this->entityFlush();
+					if ($this->entityFlush())
+					{
+					    $lbError = false;
+					
+					    $lnUserId = $this->getAuthenticatedUser();
+					    $laChanges = $this->checkChangeEntity($loEntityOriginal, $loEntity);
+					    Event::log(array('userId'=>$lnUserId, 'module'=>$this->_sModule, 'action'=>'move-list', 'record'=>$loEntity->get('id'), 'changes'=>$laChanges), 6);
+					}
 				}
 				else
 				{
@@ -767,8 +780,17 @@ abstract class ControllerAction extends ControllerActionBase
 					{
 						if (!$loEntity->isSystem())
 						{
+						    $loEntityOriginal = clone $loEntity;
 							$this->getEntityManager()->remove($loEntity);
-							$lbError = !$this->entityFlush();
+							
+							if ($this->entityFlush())
+							{
+							     $lbError = false;
+							     
+							     $lnUserId = $this->getAuthenticatedUser();
+					             $laChanges = $this->checkChangeEntity($loEntityOriginal, $loEntity);
+					             Event::log(array('userId'=>$lnUserId, 'module'=>$this->_sModule, 'action'=>'delete-list', 'record'=>$loEntity->get('id'), 'changes'=>$laChanges), 6);
+							}
 						}
 						else 
 						{
@@ -816,10 +838,15 @@ abstract class ControllerAction extends ControllerActionBase
 		{
 			if (!$loEntity->isSystem())
 			{
+			    $loEntityOriginal = clone $loEntity;
 				$this->getEntityManager()->remove($loEntity);
 				
 				if ($this->entityFlush())
 				{
+					$lnUserId = $this->getAuthenticatedUser();
+					$laChanges = $this->checkChangeEntity($loEntityOriginal, $loEntity);
+					Event::log(array('userId'=>$lnUserId, 'module'=>$this->_sModule, 'action'=>'delete', 'record'=>$loEntity->get('id'), 'changes'=>$laChanges), 6);
+				    
 					$this->flashMessenger()->addMessage(array('id'=>$this->get('_sModule') . '-' . microtime(true), 'hidden'=>$this->get('_bHiddenPushMessage'), 'push'=>$this->get('_bPushMessage'), 'type'=>'success', 'msg'=>Translator::i18n('Registro apagado permanentemente com sucesso!')));
 				}
 			}
@@ -1002,7 +1029,7 @@ abstract class ControllerAction extends ControllerActionBase
 						{
 							$lsGrid .= '
 								<li class="dropdown">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;' . Translator::i18n('Ir para a pasta') . '<b class="caret"></b></a>
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;' . Translator::i18n('Ir para') . '<b class="caret"></b></a>
 									<ul class="dropdown-menu" role="menu">';
 		
 									foreach ($this->_aFolders as $laFolder)
@@ -1296,7 +1323,7 @@ abstract class ControllerAction extends ControllerActionBase
 												$lsWindow = isset($laActions['window']) ? $laActions['window'] : "modal";
 												
 												$lsGrid .= '
-													<a class="' . $laActions['class'] . '" href="#" data-url="' . $laActions['url'] . '" data-params="id=' . $laRes['id'] . '&' . $lsParams . '" data-confirm="' . $lbConfirm . '" data-wname="' . $this->_sRoute . '-' . $laActions['title'] . '" data-wwindow="' . $lsWindow . '" data-wwidth="' . $lsWidth . '" data-wheight="' . $lsHeight . '" title="' . Translator::i18n($laActions['description']) . '" data-msg="' . $laActions['message'] . '">
+													<a class="' . $laActions['class'] . '" href="javascript:return false;" data-url="' . $laActions['url'] . '" data-params="id=' . $laRes['id'] . '&' . $lsParams . '" data-confirm="' . $lbConfirm . '" data-wname="' . $this->_sRoute . '-' . $laActions['title'] . '" data-wwindow="' . $lsWindow . '" data-wwidth="' . $lsWidth . '" data-wheight="' . $lsHeight . '" title="' . Translator::i18n($laActions['description']) . '" data-msg="' . $laActions['message'] . '">
 														<i class="' . $laActions['icon'] . '"></i>
 													</a>';
 											}

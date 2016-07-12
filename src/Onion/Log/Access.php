@@ -84,23 +84,29 @@ class Access
 			{
 				$loDb = new Adapter($laDb);
 				
+				$laExtra = array(
+					'stSession' => 'stSession',
+					'stIP' => 'stIP',
+					'txtServer' => 'txtServer'
+				);	
+				
+				$laData = array(
+					'stSession' => $lsSession,
+					'stIP' => $lsIp,
+					'txtServer' => $psMsg
+				);
+				
+				if ($lnId !== null)
+				{
+				    $laExtra['User_id'] = 'User_id';
+				    $laData['User_id'] = $lnId;
+				}
+				
 				$laColumnMap = array(
 					'timestamp' => 'dtInsert',
 					'priority' => 'stPriority',
 					'message' => 'txtCredentials',
-					'extra' => array(
-						'User_id' => 'User_id',
-						'stSession' => 'stSession',
-						'stIP' => 'stIP',
-						'txtServer' => 'txtServer'
-					)
-				);
-				
-				$laData = array(
-					'User_id' => $lnId,
-					'stSession' => $lsSession,
-					'stIP' => $lsIp,
-					'txtServer' => $psMsg
+					'extra' => $laExtra
 				);
 				
 				$laCredential = array(
