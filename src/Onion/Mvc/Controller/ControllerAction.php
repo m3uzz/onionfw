@@ -63,8 +63,15 @@ abstract class ControllerAction extends ControllerActionBase
 	 */
 	public function indexAction ()
 	{
-		$lsGrid = $this->grid();
-		
+	    if ($this->_sGrid != null)
+	    {
+	        $lsGrid = $this->gridRender();
+	    }
+	    else 
+	    {
+		    $lsGrid = $this->grid();
+	    }
+	    
 		$loView = new ViewModel(
 				array(
 					'lsGrid' => $lsGrid,
@@ -85,7 +92,14 @@ abstract class ControllerAction extends ControllerActionBase
 	 */
 	public function trashAction ()
 	{
-		$lsGrid = $this->grid(1, 0, "trash");
+		if ($this->_sGrid != null)
+	    {
+	        $lsGrid = $this->gridRender();
+	    }
+	    else 
+	    {
+		    $lsGrid = $this->grid(1, 0, "trash");
+	    }		
 		
 		$loView = new ViewModel(
 				array(
@@ -209,6 +223,81 @@ abstract class ControllerAction extends ControllerActionBase
 		
 		return $lsGrid;
 	}
+	
+	
+	/**
+	 * 
+	 * @param int $pnStatus
+	 * @param bool $pbActive
+	 * @param string $psBack
+	 * @param string $psFolderTitle
+	 * @return string|\Onion\View\Model\ViewModel
+	 */
+	public function gridRender ($pnStatus = 0, $pbActive = 1, $psBack = 'index', $psFolderTitle = null)
+	{
+		$loGrid = Application::factory($this->_sGrid);
+		
+		$lnPage = $this->request('p', 0);
+		$lnRows = $this->request('rows', $loGrid->get('numRows'));
+		$lsOrder = $this->request('ord', $loGrid->get('order'));
+		$lsOrderCol = $this->request('col', $loGrid->get('orderCol'));
+		$lsQuery = $this->request('q', '');
+		$lsField = $this->request('f', '');
+		$lsField = ($loGrid->isSearchField($lsField) ? $lsField : $loGrid->get('searchFieldDefault'));
+		$lsWhere = '';
+	
+		if ($loGrid->get('showSearch') && !empty($lsQuery))
+		{
+			$loSearch = new Search();
+			$loSearch->set('sSearchFields', $lsField);
+			$lsWhere .= $loSearch->createRLikeQuery('"' . $lsQuery . '"', 'r');
+		}
+	
+		$laParams = array(
+			'status'	=> $pnStatus,
+			'active' 	=> $pbActive,
+			'rows'		=> $lnRows,
+			'page' 		=> $lnPage,
+			'col' 		=> $lsOrderCol,
+			'ord' 		=> $lsOrder,
+			'q' 		=> $lsQuery,
+			'where' 	=> $lsWhere,
+		);
+	
+		if (method_exists($this, 'gridBeforeSelect'))
+		{
+			$laParams = $this->gridBeforeSelect($laParams);
+		}
+	
+		$laResult = $this->getEntityManager()->getRepository($this->_sEntityExtended)->getList($laParams, $lbCache=false);
+			
+		if (method_exists($this, 'gridAfterSelect'))
+		{
+			$laResult = $this->gridAfterSelect($laResult);
+		}
+		
+		$laMessages = $this->flashMessenger()->getMessages();
+		
+		$loGrid->setData($laResult['resultSet'])
+			->setTotalResults($laResult['totalCount'])
+			->setBackTo($psBack)
+			->setMessages($laMessages)
+			->setNumRows($lnRows)
+			->setSearchFieldDefault($lsField)
+			->setSearchQuery($lsQuery)
+			->setOrder($lsOrder)
+			->setOrderCol($lsOrderCol)
+			->setCurrentPage($lnPage);
+
+		$lsGrid = $loGrid->render($this->_sRoute, $psFolderTitle);
+	
+		if (method_exists($this, 'gridAfterRender'))
+		{
+			$lsGrid = $this->gridAfterRender($lsGrid);
+		}
+	
+		return $lsGrid;
+	}	
 	
 	
 	/**
@@ -1914,6 +2003,17 @@ abstract class ControllerAction extends ControllerActionBase
 	
 	
 	/**
+	 * 
+	 * @param string $psField
+	 * @param mix $pmValue
+	 */
+	public function formatFieldToCSV ($psField, $pmValue)
+	{
+	    return $pmValue;
+	}
+	
+	
+	/**
 	 *
 	 * @return \Zend\Http\Response
 	 */
@@ -1975,7 +2075,7 @@ abstract class ControllerAction extends ControllerActionBase
 
 					foreach ($this->_aGridFields as $lsCol => $lsField)
 					{
-						$lsData .= $lsComma . '"' . $this->formatFieldToGrid($lsField, $laValue[$lsField]) . '"';
+						$lsData .= $lsComma . '"' . $this->formatFieldToCSV($lsField, $laValue[$lsField]) . '"';
 						$lsComma = ',';
 					}
 	

@@ -149,7 +149,7 @@ class RadioCheck extends ElementAbstract
 	{
 		$lsItemArea = "";
 		
-		$lsOptChecked = $this->_sValue;
+		$lmOptChecked = $this->_sValue;
 		$laOptions = $this->getOptsVal('value_options');
 		
 		if (is_array($laOptions))
@@ -161,18 +161,14 @@ class RadioCheck extends ElementAbstract
 				$lsColor = '';
 				$lsLabel = '';
 				$lsIcon = '';
-					
-				if ($lsOptChecked == $lsValue)
-				{
-					$lsActive = ' active';
-					$lsChecked = 'checked';
-					//$lsColor = " btn-info";
-				}
-		
+				$lsTitle = '';
+				$lsCheckbox = '';
+				
 				if (is_array($lmLabel))
 				{
 					$lsLabel = $lmLabel['label'];
 					$lsIcon = $this->getIcon($lmLabel['icon']);
+					$lsTitle = $this->getIcon($lmLabel['title']);
 				}
 				else 
 				{
@@ -184,6 +180,38 @@ class RadioCheck extends ElementAbstract
 				if ($lsType == 'multi_checkbox')
 				{
 					$lsType = 'checkbox';
+					$lsCheckbox = '[]';
+				}
+				
+				if ($lsType == "checkbox")
+				{
+				    if (is_array($lmOptChecked))
+				    {
+				        foreach ($lmOptChecked as $lsOptChecked)
+				        {
+				            if ($lsOptChecked == $lsValue)
+    				        {
+    					       $lsActive = ' active';
+    					       $lsChecked = 'checked';
+    					       //$lsColor = " btn-info";
+    				        }	
+				        }
+				    }
+				    elseif ($lmOptChecked == $lsValue)
+    				{
+    					$lsActive = ' active';
+    					$lsChecked = 'checked';
+    					//$lsColor = " btn-info";			        
+				    }
+				}
+				else
+				{
+    				if ($lmOptChecked == $lsValue)
+    				{
+    					$lsActive = ' active';
+    					$lsChecked = 'checked';
+    					//$lsColor = " btn-info";
+    				}				
 				}
 				
 				$lsItemTemplate = $this->getItemTemplate();
@@ -193,7 +221,7 @@ class RadioCheck extends ElementAbstract
 					$lsItemTemplate = $this->getClearItemTemplate($this->getOptsVal('data-display'));
 				}
 				
-				Layout::parseTemplate($lsItemTemplate, "#%NAME%#", $this->_sName);
+				Layout::parseTemplate($lsItemTemplate, "#%NAME%#", $this->_sName . $lsCheckbox);
 				Layout::parseTemplate($lsItemTemplate, "#%ID%#", $this->_sName . '-' . $lsValue);
 				Layout::parseTemplate($lsItemTemplate, "#%COLOR%#", $lsColor);
 				Layout::parseTemplate($lsItemTemplate, "#%TYPE%#", $lsType);
@@ -201,10 +229,13 @@ class RadioCheck extends ElementAbstract
 				Layout::parseTemplate($lsItemTemplate, "#%ACTIVE%#", $lsActive);
 				Layout::parseTemplate($lsItemTemplate, "#%VALUE%#", $lsValue);
 				Layout::parseTemplate($lsItemTemplate, "#%CHECKED%#", $lsChecked);
+				Layout::parseTemplate($lsItemTemplate, "#%TOUPPER%#", $this->getAttrVal('data-toUpper'));
 				Layout::parseTemplate($lsItemTemplate, "#%REQUIRED%#", $this->getAttrVal('required'));
 				Layout::parseTemplate($lsItemTemplate, "#%READONLY%#", $this->getAttrVal('readonly'));
+				Layout::parseTemplate($lsItemTemplate, "#%ITEMCLASS%#", $this->getAttrVal('class'));
 				Layout::parseTemplate($lsItemTemplate, "#%ITEMLABEL%#", $lsLabel);
 				Layout::parseTemplate($lsItemTemplate, "#%ICON%#", $lsIcon);
+				Layout::parseTemplate($lsItemTemplate, "#%TITLE%#", $lsTitle);
 				
 				$lsItemArea .= $lsItemTemplate;
 			}
@@ -243,6 +274,9 @@ class RadioCheck extends ElementAbstract
 				id="#%ID%#"
 				value="#%VALUE%#"
 				autocomplete="off"
+		        title="#%TITLE%#"
+		        class="#%ITEMCLASS%#"
+		        #%TOUPPER%#
 				#%CHECKED%#
 				#%REQUIRED%#
 				#%READONLY%#
@@ -267,6 +301,9 @@ class RadioCheck extends ElementAbstract
 				id="#%ID%#"
 				value="#%VALUE%#"
 				autocomplete="off"
+		        title="#%TITLE%#"
+		        class="#%ITEMCLASS%#"
+		        #%TOUPPER%#
 				#%CHECKED%#
 				#%REQUIRED%#
 				#%READONLY%#

@@ -82,6 +82,8 @@ abstract class ControllerActionBase extends Zend\AbstractActionController
 	
 	protected $_sForm = '';
 	
+	protected $_sGrid = '';
+	
 	protected $_sTitleS = '';
 	
 	protected $_sTitleP = '';

@@ -152,6 +152,14 @@ abstract class ElementAbstract implements ElementInterface
 			{
 				return 'data-maskalt="' . $this->_aAttr[$psIten] . '"';
 			}
+			elseif ($psIten == 'data-toUpper' && $this->_aAttr[$psIten] == false)
+			{
+				return 'data-toUpper="false"';
+			}
+			elseif ($psIten == 'data-toUpper' && $this->_aAttr[$psIten] == true)
+			{
+				return 'data-toUpper="true"';
+			}
 			else
 			{
 				return $this->_aAttr[$psIten];

@@ -98,7 +98,7 @@ class Event
 		$lsTable = $laLog['table'];
 		$lsFilePosfix = "_" . $laLog['fileName'];
 		$lsLine = "";
-		$lsId = NULL;
+		$lsId = null;
 		
 		if (Util::toBoolean($laLog['enable']) || $pbSave)
 		{
@@ -138,21 +138,27 @@ class Event
 					$lsLine = Json::encode($pmParam);
 					$lsServer = Json::encode($_SERVER);
 					
+					$laExtra = array(
+					   'stIP' => 'stIP',
+					   'txtServer' => 'txtServer'
+				    );	
+				
+					$laData = array(
+						'stIP' => $lsIP,
+						'txtServer' => $lsServer
+					);
+				
+					if ($lsId !== null)
+				    {
+				        $laExtra['User_id'] = 'User_id';
+				        $laData['User_id'] = $lsId;
+				    }
+				
 					$laColumnMap = array(
 						'timestamp' => 'dtInsert',
 						'priority' => 'stPriority',
 						'message' => 'stMsg',
-						'extra' => array(
-							'User_id' => 'User_id',
-							'stIP' => 'stIP',
-							'txtServer' => 'txtServer'
-						)
-					);
-					
-					$laData = array(
-						'User_id' => $lsId,
-						'stIP' => $lsIP,
-						'txtServer' => $lsServer
+						'extra' => $laExtra
 					);
 					
 					$loWriter = new Writer\Db($loDb, $lsTable, $laColumnMap);
