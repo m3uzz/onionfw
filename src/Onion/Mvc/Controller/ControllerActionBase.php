@@ -52,6 +52,7 @@ use Onion\View\Model\ViewModel;
 use Onion\Json\Json;
 use Zend\Session\Container;
 use Onion\Lib\Session;
+use Zend\Db\Sql\Ddl\Column\Boolean;
 
 
 abstract class ControllerActionBase extends Zend\AbstractActionController
@@ -64,16 +65,48 @@ abstract class ControllerActionBase extends Zend\AbstractActionController
 	
 	protected $_sGetParam = '';
 	
+	/**
+	 * Default: Backend
+	 * 
+	 * @var sting $_sLayout
+	 */
 	protected $_sLayout = 'Backend';
 	
-	protected $_sWindowType = 'default'; // default, popup, modal
+	/**
+	 * Values: default, popup, modal
+	 * Default: default
+	 * 
+	 * @var sting $_sWindowType
+	 */
+	protected $_sWindowType = 'default'; 
 	
-	protected $_sResponse = 'html'; // html, ajax, json, stream 
+	/**
+	 * Values: html, ajax, json, stream
+	 * Default: html
+	 * 
+	 * @var string
+	 */
+	protected $_sResponse = 'html';
 	
+	/**
+	 * Default: 4000
+	 * 
+	 * @var int $_nStreamRetry
+	 */
 	protected $_nStreamRetry = 4000;
 	
+	/**
+	 * Default: false
+	 * 
+	 * @var bool $_bPushMessage
+	 */
 	protected $_bPushMessage = false;
 	
+	/**
+	 * Default: false
+	 * 
+	 * @var bool $_bHiddenPushMessage
+	 */
 	protected $_bHiddenPushMessage = false;
 	
 	protected $_sEntity = '';
@@ -588,16 +621,16 @@ abstract class ControllerActionBase extends Zend\AbstractActionController
 				
 			$laParams['action'] = $psHookAction;
 
-			$lsTemplate = $this->layout()->getTemplate();
+			//$lsTemplate = $this->layout()->getTemplate();
 			$loResult = $this->forward()->dispatch($lsController, $laParams);				
-			$this->layout($lsTemplate);
+			//$this->layout($lsTemplate);
 				
 			$loViewManager = $this->getServiceLocator()->get('ViewManager');
 			return $loViewManager->getRenderer()->render($loResult);
 		}
 		else
 		{
-			throw new \Exception("Hook method ($psHookAction) is not registred for the ($psArea) area!");
+			//throw new \Exception("Hook method ($psHookAction) is not registred for the ($psArea) area!");
 		}
 	
 		return false;

@@ -136,6 +136,14 @@ abstract class ElementAbstract implements ElementInterface
 			{
 				return 'readonly="readonly"';
 			}
+			elseif ($psIten == 'disabled' && $this->_aAttr[$psIten] == true)
+			{
+				return 'disabled="disabled"';
+			}			
+			elseif ($psIten == 'multiple' && $this->_aAttr[$psIten] == true)
+			{
+				return 'multiple="multiple"';
+			}			
 			elseif ($psIten == 'placeholder' && !empty($this->_aAttr[$psIten]))
 			{
 				return 'placeholder="' . $this->_aAttr[$psIten] . '"';
@@ -215,38 +223,6 @@ abstract class ElementAbstract implements ElementInterface
 	 * @param object $poElement
 	 * @return array
 	 */
-	public function getFieldMessageX ($poElement)
-	{
-		$laMessages = $poElement->getMessages();
-		$lsMsgError = "";
-		$lsClassError = "";
-	
-		if (is_array($laMessages))
-		{
-			foreach ($laMessages as $lsMsg)
-			{
-				$lsMsgError .= "<li>$lsMsg</li>";
-			}
-		}
-	
-		if (!empty($lsMsgError))
-		{
-			$lsClassError = " input-error";
-			$lsMsgError = "<ul>$lsMsgError</ul>";
-		}
-	
-		return array(
-			'class'=>$lsClassError,
-			'msg'=>$lsMsgError
-		);
-	}
-	
-	
-	/**
-	 *
-	 * @param object $poElement
-	 * @return array
-	 */
 	public function getFieldMessage ()
 	{
 		$laMessages = $this->_oElement->getMessages();
@@ -257,19 +233,19 @@ abstract class ElementAbstract implements ElementInterface
 		{
 			foreach ($laMessages as $lsMsg)
 			{
-				$lsMsgError .= "<li>$lsMsg</li>";
+				$lsMsgError .= '<li>' . $lsMsg . '</li>';
 			}
 		}
 	
 		if (!empty($lsMsgError))
 		{
-			$lsClassError = " input-error";
-			$lsMsgError = "<ul>$lsMsgError</ul>";
+			$lsClassError = " input-error has-error";
+			$lsMsgError = "<ul class='input-message'>" . $lsMsgError . "</ul>";
 		}
 	
 		return array(
 			'class'=>$lsClassError,
-			'msg'=>$lsMsgError
+			'msg'=>$lsMsgError,
 		);
 	}
 	
@@ -289,4 +265,53 @@ abstract class ElementAbstract implements ElementInterface
 	
 		return;
 	}
+	
+	
+	/**
+	 *
+	 * @return void|string
+	 */
+	public function getRequiredArea ()
+	{
+		$lsRequired = $this->getAttrVal('required');
+	
+		if (!empty($lsRequired))
+		{
+			return '&nbsp;<span rule="button" class="form-required" data-toggle="tooltip" data-placement="top" title="' . Translator::i18n('Preenchimento obrigatório') . '"><sup class="text-danger">*</sup></span>';
+		}
+	
+		return;
+	}
+	
+	
+	/**
+	 *
+	 * @return void|string
+	 */
+	public function getHelpArea ()
+	{
+		$lsTitle = $this->getAttrVal('title');
+	
+		if (!empty($lsTitle))
+		{
+			return '&nbsp;<span rule="button" class="form-help" data-toggle="popover" data-html="true" data-trigger="hover" data-content="' . $lsTitle . '"><i class="glyphicon glyphicon-question-sign text-muted small"></i></span>';
+		}
+	
+		return;
+	}	
+	
+	
+	/**
+	 *
+	 * @return void|string
+	 */
+	public function getMessageArea ($paMessage)
+	{
+		if (is_array($paMessage) && isset($paMessage['msg']) && !empty($paMessage['msg']))
+		{
+			return '&nbsp;<span rule="button" class="form-msg" data-toggle="popover" data-html="true" data-trigger="hover" data-original-title="' . Translator::i18n('Erro de preenchimento') . '" data-content="' . $paMessage['msg'] . '"><i class="glyphicon glyphicon-warning-sign text-danger small"></i></span>';
+		}
+	
+		return;
+	}	
 }

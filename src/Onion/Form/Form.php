@@ -524,7 +524,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 		{
 			$laElements = $this->getElements();
 			$lsMsgError = "";
-			
+			/*
 			if (is_array($laElements))
 			{
 				$lsError = '';
@@ -550,7 +550,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 					$lsMsgError .= '</div>';
 				}
 			}
-			
+			*/
 			$lsActive = ' active';
 			$lsTab = '	<ul class="nav nav-tabs" role="tablist">';
 			$lsContent = '	<div class="tab-content">';
@@ -648,6 +648,7 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 			{
 				if (is_object($loElement))
 				{ 
+				    /*
 					$laMessages = $loElement->getMessages();
 							
 					if (is_array($laMessages))
@@ -657,13 +658,13 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 							$poView->flashMessenger()->addMessage(array(
 								'id'=>$this->_sModule . '-' . microtime(true), 
 								'hidden'=>false, 
-								'push'=>false, 
+								'push'=>false,
 								'type'=>'danger', 
 								'msg'=>$lsMsg
 							));
 						}
-					}				
-					
+					}
+					*/
 					if ($loElement->getAttribute('type') == 'password')
 					{
 						$loElement->setValue(null);
@@ -676,6 +677,8 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 							$lsInput .= $poView->formRow($loElement);
 							break;
 						case 'submit':
+						    $loElement->setAttribute('data-loading-text', Translator::i18n('Aguarde...'));
+						    $loElement->setAttribute('data-complete-text', Translator::i18n('Salvo...'));
 							break;
 						default:
 							switch ($loElement->getOption('data-type'))
@@ -720,8 +723,8 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 									$loField = new Render\Display($loElement);
 									$lsInput .= $loField->render($poView);
 									break;
-								case "text":
-									$loField = new Render\Text($loElement);
+								case "textDescription":
+									$loField = new Render\TextDescription($loElement);
 									$lsInput .= $loField->render($poView);
 									break;
 								case "ckEditor":
@@ -730,6 +733,10 @@ class Form extends Zend\Form implements ObjectManagerAwareInterface
 									break;
 								case "ajaxUpload":
 									$loField = new Render\AjaxUpload($loElement);
+									$lsInput .= $loField->render($poView);
+									break;
+							    case "selectPicker":
+									$loField = new Render\SelectPicker($loElement);
 									$lsInput .= $loField->render($poView);
 									break;
 								default:

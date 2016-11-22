@@ -1143,7 +1143,7 @@ abstract class ControllerAction extends ControllerActionBase
 							
 							$lsGrid .= '
 								<li>
-									<a href="/' . $this->_sRoute . '/?' . $this->_sGetParam . '" title="' . Translator::i18n('Voltar para a entrada') . '">
+									<a href="/' . $this->_sRoute . '/index/?' . $this->_sGetParam . '" title="' . Translator::i18n('Voltar para a entrada') . '">
 										<i class="glyphicon glyphicon-inbox"></i> ' . Translator::i18n('Entrada') . '
 									</a>
 								</li>';
@@ -2003,23 +2003,48 @@ abstract class ControllerAction extends ControllerActionBase
 	
 	
 	/**
-	 * 
-	 * @param string $psField
-	 * @param mix $pmValue
-	 */
-	public function formatFieldToCSV ($psField, $pmValue)
-	{
-	    return $pmValue;
-	}
-	
-	
-	/**
 	 *
 	 * @return \Zend\Http\Response
 	 */
 	public function csvAction ()
 	{
-		return $this->csv();
+		$lsOrder = $this->request('ord', $this->_sGridOrder);
+		$lsOrderCol = $this->request('col', $this->_sGridOrderCol);
+		$lsQuery = $this->request('q', '');
+		$lsField = $this->request('f', '');
+		$lsField = (isset($this->_aSearchFields[$lsField]) ? $lsField : $this->_sSearchFieldDefault);
+		$lsWhere = '';
+		
+		if ($this->_bSearch && !empty($lsQuery))
+		{
+			$loSearch = new Search();
+			$loSearch->set('sSearchFields', $lsField);
+			$lsWhere .= $loSearch->createRLikeQuery('"' . $lsQuery . '"', 'r');
+		}
+		
+	    $laParams = array(
+			'status'	=> 0,
+			'active' 	=> 1,
+			'rows'		=> 0,
+			'page' 		=> 0,
+			'col' 		=> $lsOrderCol,
+			'ord' 		=> $lsOrder,
+			'q' 		=> $lsQuery,
+			'where' 	=> $lsWhere,
+		);
+	    		
+		return $this->csv($laParams);
+	}
+		
+	
+	/**
+	 * 
+	 * @param string $psField
+	 * @param mixed $pmValue
+	 */
+	public function formatFieldToCSV ($psField, $pmValue)
+	{
+	    return $pmValue;
 	}
 		
 	
@@ -2029,23 +2054,8 @@ abstract class ControllerAction extends ControllerActionBase
 	 */
 	public function csv (array $paParams = null)
 	{
-		$laParams = array(
-			'status'	=> 0,
-			'active' 	=> 1,
-			'rows'		=> 0,
-			'page' 		=> 0,
-			'col' 		=> $this->_sGridOrderCol,
-			'ord' 		=> $this->_sGridOrder,
-			'q' 		=> '',
-			'where' 	=> '',
-		);
-		
-		if (is_array($paParams))
-		{
-			$laParams = $paParams;
-		}
-	
-		$laResult = $this->getEntityManager()->getRepository($this->_sEntityExtended)->getList($laParams);
+
+		$laResult = $this->getEntityManager()->getRepository($this->_sEntityExtended)->getList($paParams);
 		//Debug::displayd($laResult);
 
 		$lsFileName = $this->_sRoute . date('Y-m-d') . '.csv';
@@ -2075,7 +2085,7 @@ abstract class ControllerAction extends ControllerActionBase
 
 					foreach ($this->_aGridFields as $lsCol => $lsField)
 					{
-						$lsData .= $lsComma . '"' . $this->formatFieldToCSV($lsField, $laValue[$lsField]) . '"';
+						$lsData .= $lsComma . '"' . utf8_decode($this->formatFieldToCSV($lsField, $laValue[$lsField])) . '"';
 						$lsComma = ',';
 					}
 	

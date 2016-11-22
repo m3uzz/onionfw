@@ -54,39 +54,6 @@ class Submit extends ElementAbstract
 	
 	/**
 	 *
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderSubmit ($poElement)
-	{
-		$lsEcho = '';
-	
-		$lsIcon = $poElement->getOption('icon');
-	
-		if (!empty($lsIcon))
-		{
-			$lsIcon = '<i class="' . $lsIcon . '"></i> ';
-		}
-	
-		$lsEcho .= '<button
-						type="'.$poElement->getAttribute('type').'"
-						id="'.$poElement->getAttribute('id').'"
-						name="'.$poElement->getName().'"
-						title="'.$poElement->getAttribute('title').'"
-						class="'.$poElement->getAttribute('class').'"
-						value="'.$poElement->getValue().'"
-					>';
-		$lsEcho .=		$lsIcon;
-		$lsEcho .= '	<span class="button-label">'.$poElement->getValue().'</span>';
-		$lsEcho .= '	<span class="hintHelp"></span>';
-		$lsEcho .= '</button>';
-	
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
 	 * @param object $poView
 	 * @return string
 	 */
@@ -98,6 +65,8 @@ class Submit extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%CLASS%#", $this->getAttrVal("class"));
 		Layout::parseTemplate($this->_sTemplate, "#%VALUE%#", $this->_sValue);
 		Layout::parseTemplate($this->_sTemplate, "#%TITLE%#", $this->getAttrVal('title'));
+		Layout::parseTemplate($this->_sTemplate, "#%LOADING%#", $this->getAttrVal('data-loading-text'));
+		Layout::parseTemplate($this->_sTemplate, "#%COMPLETE%#", $this->getAttrVal('data-complete-text'));
 		Layout::parseTemplate($this->_sTemplate, "#%ICONAREA%#", $this->getIconArea());
 	
 		return $this->_sTemplate;
@@ -117,10 +86,11 @@ class Submit extends ElementAbstract
 			name="#%NAME%#"
 			class="#%CLASS%#"
 			value="#%VALUE%#"
-			title="#%TITLE%#">
+			title="#%TITLE%#"
+		    data-loading-text="#%LOADING%#"
+		    data-complete-text="#%COMPLETE%#">
 				#%ICONAREA%#
 				<span class="button-label">#%VALUE%#</span>
-				<span class="hintHelp"></span>
 		</button>';
 		
 		return $lsEcho;

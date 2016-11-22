@@ -55,52 +55,6 @@ class Display extends ElementAbstract
 	/**
 	 *
 	 * @param object $poView
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderDisplay ($poView, $poElement)
-	{
-		$lsEcho = '';
-	
-		$lsIcon = $poElement->getOption('icon');
-	
-		if (!empty($lsIcon))
-		{
-			$lsIcon = '<i class="' . $lsIcon . '"></i> ';
-		}
-	
-		$lsLabel = $poElement->getOption('label');
-	
-		if (!empty($lsLabel))
-		{
-			$lsLabel = '	<label for="'.$poElement->getOption('for').'">'.$poElement->getOption('label').' </label><br/>';
-			$poElement->setLabel('');
-		}
-	
-		$lsElementName = $poElement->getName();
-	
-		$lnColLength = $poElement->getOption('length');
-	
-		if (empty($lnColLength))
-		{
-			$lnColLength = $this->_nColLength;
-		}
-	
-		$lsEcho .= '<div class="input-form input-form-sm col-lg-'.$lnColLength.'">';
-		$lsEcho .= 		$lsLabel;
-		$lsEcho .=		$lsIcon;
-		$lsEcho .= '	<span id="'.$lsElementName.'Span" class="input-display">';
-		$lsEcho .= 			$poView->formRow($poElement);
-		$lsEcho .= '	</span>';
-		$lsEcho .= '</div>';
-			
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
-	 * @param object $poView
 	 * @return string
 	 */
 	public function render ($poView = null)

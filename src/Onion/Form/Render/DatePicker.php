@@ -54,63 +54,6 @@ class DatePicker extends ElementAbstract
 	
 	/**
 	 *
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderDatePicker ($poElement)
-	{
-		$laOptions = $poElement->getOption('datePicker');
-		$laElementName = $poElement->getName();
-	
-		$laMessage = $this->getFieldMessage($poElement);
-	
-		$lnColLength = $poElement->getOption('length');
-	
-		if (empty($lnColLength))
-		{
-			$lnColLength = $this->_nColLength;
-		}
-	
-		$lsEcho = '<div class="input-form input-form-sm col-lg-'.$lnColLength.'">';
-		$lsEcho .= '	<label for="'.$poElement->getOption('for').'">'.$poElement->getOption('label').' </label>';
-		$lsEcho .= '	<div class="input-group date" id="'.$poElement->getAttribute('id').'Group">';
-		$lsEcho .= '		<input
-							type="'.$poElement->getAttribute('type').'"
-							id="'.$poElement->getAttribute('id').'"
-							name="'.$poElement->getName().'"
-							title="'.$poElement->getAttribute('title').'"
-							placeholder="'.$poElement->getAttribute('placeholder').'"
-							'.($poElement->getAttribute('required') ? 'required="required"' : "").'
-							'.($poElement->getAttribute('readonly') ? 'readonly="readonly"' : "").'
-							class="'.$poElement->getAttribute('class') . $laMessage['class'] . ' datepickerField"
-							'.($poElement->getAttribute('pattern') ? 'pattern="' . $poElement->getAttribute('pattern') . '"' : "").'
-							'.($poElement->getAttribute('data-mask') ? 'data-mask="' . $poElement->getAttribute('data-mask') . '"' : "").'
-							'.($poElement->getAttribute('data-maskalt') ? 'data-maskalt="' . $poElement->getAttribute('data-maskalt') . '"' : "").'
-							value="'.Translator::dateS2P($poElement->getValue()).'"
-							autocomplete="off"
-							>';
-		$lsEcho .= '		<span class="input-group-btn">';
-		$lsEcho .= '			<button
-								type="button"
-								id="'.(isset($laOptions['id']) ? $laOptions['id'] : $laElementName.'Btn').'"
-								title="'.(isset($laOptions['title']) ? $laOptions['title'] : (isset($laOptions['data-title']) ? $laOptions['data-title'] : "")).'"
-								class="'.(isset($laOptions['class']) ? $laOptions['class'] : "btn btn-default datepickerTrigger").'"
-								>
-								<i class="'.(isset($laOptions['data-icon']) ? $laOptions['data-icon'] : "glyphicon glyphicon-calendar").'"></i>
-								</button>';
-		$lsEcho .= '		</span>';
-		$lsEcho .= $laMessage['msg'];
-		$lsEcho .=  '		<i class="requiredMark"></i>';
-		$lsEcho .=  '		<span class="hintHelp"></span>';
-		$lsEcho .=  '	</div>';
-		$lsEcho .=  '</div>';
-	
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
 	 * @param object $poView
 	 * @return string
 	 */
@@ -126,6 +69,10 @@ class DatePicker extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
+		Layout::parseTemplate($this->_sTemplate, "#%HELPICON%#", $this->getHelpArea());
+		Layout::parseTemplate($this->_sTemplate, "#%REQUIREDICON%#", $this->getRequiredArea());
+        Layout::parseTemplate($this->_sTemplate, "#%MSGICON%#", $this->getMessageArea($laMessage));
+		Layout::parseTemplate($this->_sTemplate, "#%CLASSERROR%#", $laMessage['class']);		
 		
 		Layout::parseTemplate($this->_sTemplate, "#%TYPE%#", $this->getAttrVal('type'));
 		Layout::parseTemplate($this->_sTemplate, "#%ID%#", $this->getAttrVal('id'));
@@ -146,8 +93,6 @@ class DatePicker extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%BTNCLASS%#", $this->getDataOptsVal("class", "btn btn-default"));
 		Layout::parseTemplate($this->_sTemplate, "#%DATAICON%#", $this->getDataOptsVal("data-icon", "glyphicon glyphicon-calendar"));
 		
-		Layout::parseTemplate($this->_sTemplate, "#%MSG%#", $laMessage['msg']);
-		
 		return $this->_sTemplate;
 	}
 
@@ -159,8 +104,8 @@ class DatePicker extends ElementAbstract
 	public function getDefaultTemplate ()
 	{
 		$lsEcho = '
-		<div class="input-form input-form-sm col-lg-#%COLLENGTH%#">
-			<label for="#%FOR%#">#%LABEL%# </label>
+		<div class="input-form input-form-sm col-lg-#%COLLENGTH%# #%CLASSERROR%#">
+			<label for="#%FOR%#">#%LABEL%#</label>#%REQUIREDICON%##%HELPICON%##%MSGICON%#
 			<div class="input-group date" id="#%ID%#Group">
 				<input
 					type="#%TYPE%#"
@@ -168,7 +113,6 @@ class DatePicker extends ElementAbstract
 					name="#%NAME%#"
 					class="#%CLASS%# datepickerField"
 					value="#%VALUE%#"
-					title="#%TITLE%#"
 					#%PLACEHOLDER%#
 					#%REQUIRED%#
 					#%READONLY%#
@@ -176,6 +120,7 @@ class DatePicker extends ElementAbstract
 					#%DATAMASK%#
 					#%DATAMASKALT%#
 					autocomplete="off">
+		        <i class="requiredMark"></i>
 				<span class="input-group-btn">
 					<button
 						type="button"
@@ -185,9 +130,6 @@ class DatePicker extends ElementAbstract
 							<i id="#%NAME%#Icon" class="#%DATAICON%#"></i>
 					</button>
 				</span>
-		 		#%MSG%#
-				<i class="requiredMark"></i>
-				<span class="hintHelp"></span>
 			</div>
 		</div>';
 	

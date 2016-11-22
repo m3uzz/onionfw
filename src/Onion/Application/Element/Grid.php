@@ -202,6 +202,7 @@ class Grid extends AbstractApp
 		return parent::__construct($psId, $psResource);
 	}
 	
+	
 	/**
 	 *
 	 * @param string $psBackTo
@@ -217,6 +218,7 @@ class Grid extends AbstractApp
 	
 		return $this;
 	}
+	
 	
 	/**
 	 *
@@ -238,6 +240,7 @@ class Grid extends AbstractApp
 		return $this;
 	}	
 
+	
 	/**
 	 *
 	 * @param string $psSearchFieldDefault
@@ -254,6 +257,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param string $psSearchQuery
@@ -269,6 +273,7 @@ class Grid extends AbstractApp
 	
 		return $this;
 	}
+	
 	
 	/**
 	 *
@@ -288,6 +293,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 	
+	
 	/**
 	 *
 	 * @param string $psOrderCol
@@ -303,6 +309,7 @@ class Grid extends AbstractApp
 	
 		return $this;
 	}
+	
 	
 	/**
 	 *
@@ -322,6 +329,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param boolean $pbShowColOptions
@@ -341,6 +349,7 @@ class Grid extends AbstractApp
 	
 		return $this;
 	}
+	
 	
 	/**
 	 *
@@ -362,6 +371,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param boolean $pbShowPaginationInfo        	
@@ -382,6 +392,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param boolean $pbShowPaginationNav
@@ -402,6 +413,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 	
+	
 	/**
 	 *
 	 * @param array $paPaginationNumRows
@@ -421,6 +433,7 @@ class Grid extends AbstractApp
 		return $this;
 	}	
 
+	
 	/**
 	 *
 	 * @param int $pnNumRows
@@ -440,6 +453,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 	
+	
 	/**
 	 *
 	 * @param array $paData
@@ -453,6 +467,7 @@ class Grid extends AbstractApp
 		return $this;
 	}	
 
+	
 	/**
 	 *
 	 * @param int $pnTotalResults
@@ -473,6 +488,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param int $pnCurrentPage
@@ -493,6 +509,7 @@ class Grid extends AbstractApp
 		return $this;
 	}
 		
+	
 	/**
 	 *
 	 * @param object $poPagination Onion\Paginator\Pagination
@@ -524,6 +541,7 @@ class Grid extends AbstractApp
 		return $this->_pagination;
 	}
 	
+	
 	/**
 	 *
 	 * @param array $paMessages
@@ -546,6 +564,7 @@ class Grid extends AbstractApp
 	
 	// Action methods
 	
+	
 	/**
 	 * Create a new Column object into the array object
 	 * and setting its id and name
@@ -558,6 +577,7 @@ class Grid extends AbstractApp
 		return $this->_colums[] = new Column($psColumnId, $this->get('resource'), $this);
 	}
 
+	
 	/**
 	 * Add an existent Column object to the array object.
 	 * If $pnPosition is int value, the object will be inserted in this array
@@ -582,6 +602,7 @@ class Grid extends AbstractApp
 		}
 	}
 
+	
 	/**
 	 * Remove a Column from the array object
 	 *
@@ -593,6 +614,7 @@ class Grid extends AbstractApp
 		return parent::remove('_colums', $pmColumnId);
 	}
 
+	
 	/**
 	 * Load the Column object from array object
 	 * or the entire array if $pmColumnId = null
@@ -607,6 +629,7 @@ class Grid extends AbstractApp
 		return parent::getElement('_colums', $pmColumnId, $pbValid);
 	}
 	
+	
 	/**
 	 * Create a new Options object into the array object
 	 * and setting its id and name
@@ -618,6 +641,7 @@ class Grid extends AbstractApp
 	{
 		return $this->_colOptions[] = new Options($psColOptionsId, $this->get('resource'), $this);
 	}
+	
 	
 	/**
 	 * Add an existent Options object to the array object.
@@ -643,6 +667,7 @@ class Grid extends AbstractApp
 		}
 	}
 	
+	
 	/**
 	 * Remove a Options from the array object
 	 *
@@ -653,6 +678,7 @@ class Grid extends AbstractApp
 	{
 		return parent::remove('_colOptions', $pmColOptionsId);
 	}
+	
 	
 	/**
 	 * Load the Options object from array object
@@ -668,6 +694,7 @@ class Grid extends AbstractApp
 		return parent::getElement('_colOptions', $pmColOptionsId, $pbValid);
 	}
 
+	
 	public function isSearchField($psField)
 	{
 		if (!empty($psField))
@@ -682,6 +709,7 @@ class Grid extends AbstractApp
 		
 		return false;
 	}
+	
 	
 	/**
 	 * 
@@ -731,6 +759,7 @@ class Grid extends AbstractApp
 		return $lsGrid;
 	}	
 
+	
 	public function renderGridHeader ($psFolder = null)
 	{
 		$lsIcon = '';
@@ -767,6 +796,7 @@ class Grid extends AbstractApp
 		return $lsGridHeader;	
 	}
 	
+	
 	/**
 	 * 
 	 * @return string
@@ -790,10 +820,13 @@ class Grid extends AbstractApp
 				<input type="hidden" name="p" value="' . $lnCurrent . '" />
 				<input type="hidden" name="q" value="' . $this->get('searchQuery') . '" />
 				<input type="hidden" name="f" value="' . $this->get('searchFieldDefault') . '" />
+				        
+                <!--#%FORM_FILTER%#-->				        
 			</form>';
 		
 		return $lsForm;
 	}
+	
 	
 	/**
 	 * 
@@ -817,6 +850,7 @@ class Grid extends AbstractApp
 		
 		return $lsMessage;
 	}
+	
 	
 	public function renderFilters ($psRoute = '', $psTitle = '')
 	{
@@ -929,6 +963,7 @@ class Grid extends AbstractApp
 		return $lsGrid;
 	}
 
+	
 	/**
 	 *
 	 * @return int
@@ -951,6 +986,7 @@ class Grid extends AbstractApp
 	
 		return $laSearchable;
 	}
+	
 	
 	/**
 	 *
@@ -983,6 +1019,7 @@ class Grid extends AbstractApp
 		return $lsTableHeader;
 	}
 	
+	
 	/**
 	 * 
 	 * @return string
@@ -999,6 +1036,7 @@ class Grid extends AbstractApp
 				</th>';		
 		}		
 	}
+	
 	
 	/**
 	 * 
@@ -1046,6 +1084,7 @@ class Grid extends AbstractApp
 		return $lsRows;
 	}
 	
+	
 	/**
 	 * 
 	 * @param int $pnId
@@ -1063,6 +1102,7 @@ class Grid extends AbstractApp
 		
 		return '';
 	}
+	
 	
 	public function renderColOptions ()
 	{
@@ -1117,6 +1157,7 @@ class Grid extends AbstractApp
 */				
 	}
 	
+	
 	/**
 	 * 
 	 * @return string
@@ -1136,6 +1177,7 @@ class Grid extends AbstractApp
 				</td>
 			</tr>';
 	}
+	
 	
 	/**
 	 *
@@ -1159,6 +1201,7 @@ class Grid extends AbstractApp
 	
 		return $lnCount;
 	}
+	
 	
 	/**
 	 * 
@@ -1239,6 +1282,7 @@ class Grid extends AbstractApp
 		return $lsPaginationNav;
 	}
 	
+	
 	/**
 	 * 
 	 * @return string
@@ -1265,6 +1309,7 @@ class Grid extends AbstractApp
 		return $lsAlertModal;
 	}
 
+	
 	/**
 	 * 
 	 * @return string

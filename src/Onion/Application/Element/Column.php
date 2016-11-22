@@ -79,6 +79,12 @@ class Column extends AbstractApp
 	 * @var boolean
 	 */
 	protected $_resizable = true;
+	
+	/**
+	 *
+	 * @var boolean
+	 */
+	protected $_editable = false;
 		
 	/**
 	 *
@@ -125,6 +131,7 @@ class Column extends AbstractApp
 	
 	// Settings
 	
+	
 	/**
 	 * Construct an object setting the id, name and resource properties
 	 * if the id is not given the construct will return an exception
@@ -139,6 +146,7 @@ class Column extends AbstractApp
 		return parent::__construct($psId, $psResource, $poParent);
 	}
 
+	
 	/**
 	 *
 	 * @param string $psOrdering
@@ -154,6 +162,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 		
+	
 	/**
 	 *
 	 * @param boolean $pbSortable        	
@@ -174,6 +183,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param boolean $pbSearchable
@@ -194,6 +204,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 		
+	
 	/**
 	 *
 	 * @param boolean $pbVisible        	
@@ -214,6 +225,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param boolean $pbResizable
@@ -234,6 +246,28 @@ class Column extends AbstractApp
 		return $this;
 	}
 	
+	
+	/**
+	 *
+	 * @param boolean $pbEditable
+	 * @throws Exception
+	 * @return \Onion\Application\Element\Column
+	 */
+	public function setEditable ($pbEditable = false)
+	{
+		if (is_bool($pbEditable))
+		{
+			$this->_editable = $pbEditable;
+		}
+		else
+		{
+			throw new Exception('The editable value should be a boolean!');
+		}
+	
+		return $this;
+	}	
+	
+	
 	/**
 	 *
 	 * @param string $psClass        	
@@ -249,6 +283,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param string $psWidth        	
@@ -261,6 +296,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param string $psAlign
@@ -272,6 +308,7 @@ class Column extends AbstractApp
 	
 		return $this;
 	}
+	
 	
 	/**
 	 *
@@ -285,6 +322,7 @@ class Column extends AbstractApp
 		return $this;
 	}
 
+	
 	/**
 	 *
 	 * @param string $psBackground
@@ -296,6 +334,7 @@ class Column extends AbstractApp
 	
 		return $this;
 	}	
+	
 	
 	/**
 	 *
@@ -309,7 +348,9 @@ class Column extends AbstractApp
 		return $this;
 	}
 		
+	
 	// Action methods
+	
 	
 	/**
 	 * Create a new Button object
@@ -323,6 +364,7 @@ class Column extends AbstractApp
 		return $this->_button = new Button($psButtonId, $this->get('resource'), $this);
 	}
 
+	
 	/**
 	 * Remove a Button
 	 *
@@ -333,6 +375,7 @@ class Column extends AbstractApp
 		return $this->_button = null;
 	}
 
+	
 	/**
 	 * Load the Button object from array object
 	 * or the entire array if $pmButtonId = null
@@ -387,6 +430,7 @@ class Column extends AbstractApp
 				
 		return $lsCol;
 	}
+	
 	
 	/**
 	 * 

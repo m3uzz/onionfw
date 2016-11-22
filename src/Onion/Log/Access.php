@@ -84,6 +84,10 @@ class Access
 			{
 				$loDb = new Adapter($laDb);
 				
+				$laServer = $_SERVER;
+				$laServer['ACCESS_MSG'] = $psMsg;
+				$lsServer = Json::encode($laServer);
+				
 				$laExtra = array(
 					'stSession' => 'stSession',
 					'stIP' => 'stIP',
@@ -93,7 +97,7 @@ class Access
 				$laData = array(
 					'stSession' => $lsSession,
 					'stIP' => $lsIp,
-					'txtServer' => $psMsg
+					'txtServer' => $lsServer
 				);
 				
 				if ($lnId !== null)

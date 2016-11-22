@@ -54,57 +54,6 @@ class table extends ElementAbstract
 	
 	/**
 	 *
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderTable ($poElement)
-	{
-		$laOptions = $poElement->getOption('table');
-		$laAttr = $poElement->getAttributes();
-	
-		$laElementName = $poElement->getName();
-	
-		$lnColLength = $poElement->getOption('length');
-	
-		if (empty($lnColLength))
-		{
-			$lnColLength = $this->_nColLength;
-		}
-	
-		$lsEcho = '<div class="input-form input-form-sm col-lg-12">';
-		$lsEcho .= '	<input type="hidden" id="'.$poElement->getAttribute('id').'" name="'.$poElement->getName().'" value="'.$poElement->getValue().'" '.($poElement->getAttribute('required') ? 'required="required"' : "").' >';
-		$lsEcho .= '	<label for="'.$poElement->getOption('for').'">'.$poElement->getOption('label').' </label>';
-		$lsEcho .= '	<div class="formTable table-responsive">';
-		$lsEcho .= '
-							<table class="table table-hover table-condensed">
-								<thead>
-									<tr class="active">';
-	
-		if (isset($laOptions['data-column']))
-		{
-			foreach ($laOptions['data-column'] as $lsTitle)
-			{
-				$lsEcho .= '<th>' . $lsTitle . '</th>';
-			}
-		}
-	
-		$lsEcho .= '
-									</tr>
-								</thead>
-								<tbody id="table-' . $laElementName . '">
-								</tbody>
-							</table>';
-		$lsEcho .=  '		<div id="script-' . $laElementName . '">
-							</div>';
-		$lsEcho .=  '	</div>';
-		$lsEcho .=  '</div>';
-	
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
 	 * @param object $poView
 	 * @return string
 	 */

@@ -54,69 +54,6 @@ class RadioCheck extends ElementAbstract
 	
 	/**
 	 *
-	 * @param object $poElement
-	 * @param string $psType
-	 * @return string
-	 */
-	public function renderRadioCheck ($poElement, $psType = 'radio')
-	{
-		$lsEcho = '';
-	
-		$laMessage = $this->getFieldMessage($poElement);
-	
-		$lnColLength = $poElement->getOption('length');
-	
-		if (empty($lnColLength))
-		{
-			$lnColLength = $this->_nColLength;
-		}
-	
-		$lsEcho .= '<div class="input-form input-form-sm col-lg-'.$lnColLength.'">';
-		$lsEcho .= '	<label for="'.$poElement->getOption('for').'">'.$poElement->getOption('label').' </label><br/>';
-		$lsEcho .= '	<div class="btn-group" data-toggle="buttons" title="'.$poElement->getAttribute('title').'" >';
-			
-		$lsOptChecked = $poElement->getValue();
-		$laOptions = $poElement->getOption('value_options');
-		$laElementName = $poElement->getName();
-			
-		foreach ($laOptions as $lsValue => $lsLabel)
-		{
-			$lsActive = '';
-			$lsChecked = '';
-			$lsColor = '';
-				
-			if ($lsOptChecked == $lsValue)
-			{
-				$lsActive = ' active';
-				$lsChecked = 'checked';
-				//$lsColor = " btn-info";
-			}
-	
-			$lsEcho .= '	<label class="btn btn-default ' . $laMessage['class'] . $lsActive . $lsColor . '">';
-			$lsEcho .= '		<input
-									type="' . $psType . '"
-									name="' . $laElementName . '"
-									id="' . $laElementName . '-' . $lsValue . '"
-									value="' . $lsValue . '"
-									autocomplete="off" ' . $lsChecked . '
-									'.($poElement->getAttribute('required') ? 'required="required"' : "").'
-									'.($poElement->getAttribute('readonly') ? 'readonly="readonly"' : "").'
-								> ' . $lsLabel;
-			$lsEcho .= '	</label>';
-		}
-	
-		$lsEcho .= '	</div>';
-		$lsEcho .= 		$laMessage['msg'];
-		$lsEcho .= '	<i class="requiredMark"></i>';
-		$lsEcho .= '	<span class="hintHelp"></span>';
-		$lsEcho .= '</div>';
-	
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
 	 * @param string $psType
 	 * @return string
 	 */
@@ -132,9 +69,12 @@ class RadioCheck extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
+		Layout::parseTemplate($this->_sTemplate, "#%HELPICON%#", $this->getHelpArea());
+		Layout::parseTemplate($this->_sTemplate, "#%REQUIREDICON%#", $this->getRequiredArea());	
+		Layout::parseTemplate($this->_sTemplate, "#%MSGICON%#", $this->getMessageArea($laMessage));
+		Layout::parseTemplate($this->_sTemplate, "#%CLASSERROR%#", $laMessage['class']);		
 		Layout::parseTemplate($this->_sTemplate, "#%TITLE%#", $this->getAttrVal('title'));
 		Layout::parseTemplate($this->_sTemplate, "#%ITEMAREA%#", $this->getItems($laMessage['class']));
-		Layout::parseTemplate($this->_sTemplate, "#%MSG%#", $laMessage['msg']);
 	
 		return $this->_sTemplate;	
 	}
@@ -167,8 +107,8 @@ class RadioCheck extends ElementAbstract
 				if (is_array($lmLabel))
 				{
 					$lsLabel = $lmLabel['label'];
-					$lsIcon = $this->getIcon($lmLabel['icon']);
-					$lsTitle = $this->getIcon($lmLabel['title']);
+					$lsIcon = isset($lmLabel['icon']) ? $this->getIcon($lmLabel['icon']) : '';
+					$lsTitle = isset($lmLabel['title']) ? 'title="' . $lmLabel['title'] . '"' : '';
 				}
 				else 
 				{
@@ -267,15 +207,15 @@ class RadioCheck extends ElementAbstract
 	public function getItemTemplate ()
 	{
 		$lsEcho = '
-		<label class="btn btn-default #%CLASS%# #%ACTIVE%# #%COLOR%#">
+		<label class="btn btn-default #%CLASS%# #%ACTIVE%# #%COLOR%#" #%TITLE%#>
 			<input
 				type="#%TYPE%#"
 				name="#%NAME%#"
 				id="#%ID%#"
 				value="#%VALUE%#"
 				autocomplete="off"
-		        title="#%TITLE%#"
 		        class="#%ITEMCLASS%#"
+		        #%TITLE%#
 		        #%TOUPPER%#
 				#%CHECKED%#
 				#%REQUIRED%#
@@ -294,15 +234,15 @@ class RadioCheck extends ElementAbstract
 	public function getClearItemTemplate ($psDisplay = 'block')
 	{
 		$lsEcho = '
-		<label class="#%CLASS%# #%ACTIVE%#">
+		<label class="#%CLASS%# #%ACTIVE%#" #%TITLE%#>
 			<input
 				type="#%TYPE%#"
 				name="#%NAME%#"
 				id="#%ID%#"
 				value="#%VALUE%#"
 				autocomplete="off"
-		        title="#%TITLE%#"
 		        class="#%ITEMCLASS%#"
+		        #%TITLE%#
 		        #%TOUPPER%#
 				#%CHECKED%#
 				#%REQUIRED%#
@@ -330,14 +270,11 @@ class RadioCheck extends ElementAbstract
 	public function getDefaultTemplate ()
 	{
 		$lsEcho = '
-		<div class="input-form input-form-sm col-lg-#%COLLENGTH%#">
-			<label for="#%FOR%#">#%LABEL%# </label><br/>
-			<div class="btn-group" data-toggle="buttons" #%TITLE%#>
+		<div class="input-form input-form-sm col-lg-#%COLLENGTH%# #%CLASSERROR%#">
+			<label for="#%FOR%#">#%LABEL%#</label>#%REQUIREDICON%##%HELPICON%##%MSGICON%#<br/>
+			<div class="btn-group" data-toggle="buttons">
 				#%ITEMAREA%#
 			</div>
-		 	#%MSG%#
-			<i class="requiredMark"></i>
-			<span class="hintHelp"></span>
 		</div>';
 	
 		return $lsEcho;
@@ -351,14 +288,11 @@ class RadioCheck extends ElementAbstract
 	public function getClearTemplate ()
 	{
 		$lsEcho = '
-		<div class="input-form input-form-sm col-lg-#%COLLENGTH%#">
-			<label for="#%FOR%#">#%LABEL%# </label><br/>
+		<div class="input-form input-form-sm col-lg-#%COLLENGTH%# #%CLASSERROR%#">
+			<label for="#%FOR%#">#%LABEL%#</label>#%REQUIREDICON%##%HELPICON%##%MSGICON%#<br/>
 			<div class="">
 				#%ITEMAREA%#
 			</div>
-		 	#%MSG%#
-			<i class="requiredMark"></i>
-			<span class="hintHelp"></span>
 		</div>';
 	
 		return $lsEcho;

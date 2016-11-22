@@ -54,54 +54,6 @@ class ActionBtn extends ElementAbstract
 	
 	/**
 	 *
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderActionBtn ($poElement)
-	{
-		$laOptions = $poElement->getOption('actionBtn');
-		$laAttr = $poElement->getAttributes();
-	
-		$laElementName = $poElement->getName();
-	
-		$lnColLength = $poElement->getOption('length');
-	
-		if (empty($lnColLength))
-		{
-			$lnColLength = $this->_nColLength;
-		}
-	
-		$lsEcho = '<div class="input-form input-form-sm col-lg-'.$lnColLength.'">';
-		$lsEcho .= '	<label for="'.$poElement->getOption('for').'">'.$poElement->getOption('label').' </label>';
-		$lsEcho .= '	<div class="input-group">';
-		$lsEcho .= '		<button
-							type="button"
-							id="'.(isset($laOptions['id']) ? $laOptions['id'] : $laElementName.'Btn').'"
-							title="'.(isset($laOptions['data-title']) ? $laOptions['data-title'] : (isset($laAttr['title']) ? $laAttr['title'] : "")).'"
-							class="'.(isset($laOptions['data-class']) ? $laOptions['data-class'] : (isset($laAttr['class']) ? $laAttr['class'] : "btn btn-default")).'"
-							data-btn="'.(isset($laOptions['data-btn']) ? $laOptions['data-btn'] : "").'"
-							data-title="'.(isset($laOptions['data-title']) ? $laOptions['data-title'] : "").'"
-							data-act="'.(isset($laOptions['data-act']) ? $laOptions['data-act'] : "").'"
-							data-return-label="'.(isset($laOptions['data-return-label']) ? $laOptions['data-return-label'] : $laElementName).'"
-							data-return="'.(isset($laOptions['data-return']) ? $laOptions['data-return'] : "").'"
-							data-filter="'.(isset($laOptions['data-filter']) ? $laOptions['data-filter'] : "").'"
-							data-select="'.(isset($laOptions['data-select']) ? $laOptions['data-select'] : "").'"
-							data-fnCall="'.(isset($laOptions['data-fnCall']) ? $laOptions['data-fnCall'] : "").'"
-							>
-							<i class="'.(isset($laOptions['data-icon']) ? $laOptions['data-icon'] : "glyphicon glyphicon-cog").'"></i>
-							'.$poElement->getValue().'
-							</button>';
-		$lsEcho .=  '		<i class="requiredMark"></i>';
-		$lsEcho .=  '		<span class="hintHelp"></span>';
-		$lsEcho .=  '	</div>';
-		$lsEcho .=  '</div>';
-	
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
 	 * @param object $poView
 	 * @return string
 	 */
@@ -111,6 +63,7 @@ class ActionBtn extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
 		Layout::parseTemplate($this->_sTemplate, "#%NAME%#", $this->_sName);
+		Layout::parseTemplate($this->_sTemplate, "#%HELPICON%#", $this->getHelpArea());
 		
 		Layout::parseTemplate($this->_sTemplate, "#%ID%#", $this->getAttrVal("id", $this->_sName));
 		Layout::parseTemplate($this->_sTemplate, "#%TITLE%#", $this->getAttrVal("title"));
@@ -140,7 +93,7 @@ class ActionBtn extends ElementAbstract
 	{
 		$lsEcho = '
 		<div class="input-form input-form-sm col-lg-#%COLLENGTH%#">
-			<label for="#%FOR%#">#%LABEL%# </label>
+			<label for="#%FOR%#">#%LABEL%#</label>#%HELPICON%#
 			<div class="input-group">
 				<button
 					type="button"
@@ -158,8 +111,6 @@ class ActionBtn extends ElementAbstract
 						<i id="#%NAME%#Icon" class="#%DATAICON%#"></i>
 						#%VALUE%#
 				</button>
-				<i class="requiredMark"></i>
-				<span class="hintHelp"></span>
 			</div>
 		</div>';
 		

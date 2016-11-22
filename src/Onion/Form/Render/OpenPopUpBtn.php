@@ -54,51 +54,6 @@ class OpenPopUpBtn extends ElementAbstract
 	
 	/**
 	 *
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderOpenPopUpBtn ($poElement)
-	{
-		$laOptions = $poElement->getOption('openPopUpBtn');
-		$laAttr = $poElement->getAttributes();
-	
-		$laElementName = $poElement->getName();
-	
-		$lnColLength = $poElement->getOption('length');
-	
-		if (empty($lnColLength))
-		{
-			$lnColLength = $this->_nColLength;
-		}
-	
-		$lsEcho = '<div class="input-form input-form-sm col-lg-'.$lnColLength.'">';
-		$lsEcho .= '	<label for="'.$poElement->getOption('for').'">'.$poElement->getOption('label').' </label>';
-		$lsEcho .= '	<div class="input-group">';
-		$lsEcho .= '		<button
-							type="button"
-							id="'.(isset($laOptions['id']) ? $laOptions['id'] : $laElementName.'Btn').'"
-							title="'.(isset($laOptions['data-title']) ? $laOptions['data-title'] : (isset($laAttr['title']) ? $laAttr['title'] : "")).'"
-							class="openPopUpBtn '.(isset($laOptions['data-class']) ? $laOptions['data-class'] : (isset($laAttr['class']) ? $laAttr['class'] : "btn btn-default")).'"
-							data-wname="'.(isset($laOptions['data-wname']) ? $laOptions['data-wname'] : "").'"
-							data-url="'.(isset($laOptions['data-url']) ? $laOptions['data-url'] : "").'"
-							data-params="'.(isset($laOptions['data-params']) ? $laOptions['data-params'] : "").'"
-							data-wheight="'.(isset($laOptions['data-wheight']) ? $laOptions['data-wheight'] : "90%").'"
-							data-wwidth="'.(isset($laOptions['data-wwidth']) ? $laOptions['data-wwidth'] : "90%").'"
-							>
-							<i class="'.(isset($laOptions['data-icon']) ? $laOptions['data-icon'] : "glyphicon glyphicon-cog").'"></i>
-							'.$poElement->getValue().'
-							</button>';
-		$lsEcho .=  '		<i class="requiredMark"></i>';
-		$lsEcho .=  '		<span class="hintHelp"></span>';
-		$lsEcho .=  '	</div>';
-		$lsEcho .=  '</div>';
-	
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
 	 * @param object $poView
 	 * @return string
 	 */
@@ -107,6 +62,7 @@ class OpenPopUpBtn extends ElementAbstract
 		Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 		Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
 		Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
+		Layout::parseTemplate($this->_sTemplate, "#%HELPICON%#", $this->getHelpArea());
 		Layout::parseTemplate($this->_sTemplate, "#%NAME%#", $this->_sName);
 		
 		Layout::parseTemplate($this->_sTemplate, "#%ID%#", $this->getAttrVal("id", $this->_sName ));
@@ -134,7 +90,7 @@ class OpenPopUpBtn extends ElementAbstract
 	{
 		$lsEcho = '
 		<div class="input-form input-form-sm col-lg-#%COLLENGTH%#">
-			<label for="#%FOR%#">#%LABEL%# </label>
+			<label for="#%FOR%#">#%LABEL%#</label>#%HELPICON%#
 			<div class="input-group">
 				<button
 					type="button"
@@ -149,8 +105,6 @@ class OpenPopUpBtn extends ElementAbstract
 						<i id="#%NAME%#Icon" class="#%DATAICON%#"></i>
 						#%VALUE%#
 				</button>
-				<i class="requiredMark"></i>
-				<span class="hintHelp"></span>
 			</div>
 		</div>';
 		

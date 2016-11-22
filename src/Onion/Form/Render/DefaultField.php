@@ -55,60 +55,12 @@ class DefaultField extends ElementAbstract
 	/**
 	 *
 	 * @param object $poView
-	 * @param object $poElement
-	 * @return string
-	 */
-	public function renderDefaultField ($poView, $poElement)
-	{
-		$lsEcho = '';
-	
-		if ($poElement->getAttribute('type') == 'hidden')
-		{
-			$lsEcho .= $poView->formRow($poElement);
-		}
-		elseif ($poElement->getAttribute('type') == 'radio' && $poElement->getOption('data-radio') != 'default')
-		{
-			$lsEcho .= $this->renderRadioCheck($poElement);
-		}
-		elseif ($poElement->getAttribute('type') == 'checkbox' && $poElement->getOption('data-checkbox') != 'default')
-		{
-			$lsEcho .= $this->renderRadioCheck($poElement, 'checkbox');
-		}
-		else
-		{
-			$lsIcon = $poElement->getOption('icon');
-				
-			if (!empty($lsIcon))
-			{
-				$lsIcon = '<i class="' . $lsIcon . '"></i> ';
-			}
-				
-			$lnColLength = $poElement->getOption('length');
-				
-			if (empty($lnColLength))
-			{
-				$lnColLength = $this->_nColLength;
-			}
-				
-			$lsEcho .= '<div class="input-form input-form-sm col-lg-'.$lnColLength.'">';
-			$lsEcho .=		$lsIcon;
-			$lsEcho .= 		$poView->formRow($poElement);
-			$lsEcho .= '	<i class="requiredMark"></i>';
-			$lsEcho .= '	<span class="hintHelp"></span>';
-			$lsEcho .= '</div>';
-		}
-			
-		return $lsEcho;
-	}
-	
-	
-	/**
-	 *
-	 * @param object $poView
 	 * @return string
 	 */
 	public function render ($poView = null)
 	{
+	    $laMessage = $this->getFieldMessage();
+	    
 		$lsType = $this->getAttrVal('type');
 
 		if ($lsType == 'hidden')
@@ -127,11 +79,19 @@ class DefaultField extends ElementAbstract
 		}
 		else
 		{
+		    $this->_oElement->setAttribute('title', '');
+		    
 			Layout::parseTemplate($this->_sTemplate, "#%COLLENGTH%#", $this->_nColLength);
 			Layout::parseTemplate($this->_sTemplate, "#%ICONAREA%#", $this->getIconArea());
+			Layout::parseTemplate($this->_sTemplate, "#%FOR%#", $this->getOptsVal('for'));
+			Layout::parseTemplate($this->_sTemplate, "#%LABEL%#", $this->getOptsVal('label'));
+			Layout::parseTemplate($this->_sTemplate, "#%HELPICON%#", $this->getHelpArea());
+			Layout::parseTemplate($this->_sTemplate, "#%REQUIREDICON%#", $this->getRequiredArea());
+			Layout::parseTemplate($this->_sTemplate, "#%MSGICON%#", $this->getMessageArea($laMessage));
+			Layout::parseTemplate($this->_sTemplate, "#%CLASSERROR%#", $laMessage['class']);
 		
-			Layout::parseTemplate($this->_sTemplate, "#%ELEMENT%#", $poView->formRow($this->_oElement));
-			
+			Layout::parseTemplate($this->_sTemplate, "#%ELEMENT%#", $poView->formElement($this->_oElement));
+						
 			return $this->_sTemplate;
 		}
 	}
@@ -144,11 +104,11 @@ class DefaultField extends ElementAbstract
 	public function getDefaultTemplate ()
 	{
 		$lsEcho = '
-		<div class="input-form input-form-sm col-lg-#%COLLENGTH%#">
+		<div class="input-form input-form-sm col-lg-#%COLLENGTH%# #%CLASSERROR%#">
 			#%ICONAREA%#
-			#%ELEMENT%#
+		    <label for="#%FOR%#">#%LABEL%#</label>#%REQUIREDICON%##%HELPICON%##%MSGICON%#
+ 		    #%ELEMENT%#		    
 			<i class="requiredMark"></i>
-			<span class="hintHelp"></span>
 		</div>';
 	
 		return $lsEcho;

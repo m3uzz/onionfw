@@ -409,4 +409,10 @@ class Options extends AbstractApp
 	{
 		return parent::remove('_itens', $pnIndex);
 	}
+	
+	
+	public function render($a, $b, $c)
+	{
+	    
+	}
 }
